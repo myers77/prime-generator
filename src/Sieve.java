@@ -5,21 +5,40 @@ import java.util.List;
 public class Sieve
     implements PrimeNumberGenerator {
     public List<Integer> generate(int startingValue, int endingValue) {
+        if (startingValue > endingValue) {
+            int temp = startingValue;
+            startingValue = endingValue;
+            endingValue = temp;
+        }
+        if (startingValue < 2) {
+            startingValue = 2;
+        }
+        if (endingValue < 2) {
+            return new ArrayList<Integer>();
+        }
 
         BitSet rangeBits = generateRangeBits(startingValue, endingValue);
         List<Integer> segmentPrimes = getPrimes((int) Math.sqrt(endingValue));
+        System.out.println(segmentPrimes);
 
         for (int i = 2; i < segmentPrimes.size(); i++) {
-            int num = ((int) Math.ceil(startingValue * 1.0 / segmentPrimes.get(i)) * segmentPrimes.get(i)) - startingValue;
-            for (int j = num; j <= endingValue - startingValue; j += segmentPrimes.get(i)) {
+            int num = ((int) Math.ceil(startingValue * 1.0 / segmentPrimes.get(i)) * segmentPrimes.get(i));
+            for (int j = num; j <= endingValue; j += segmentPrimes.get(i)) {
                 rangeBits.clear(j);
             }
         }
 
+        if (startingValue <= (int) Math.sqrt(endingValue)) {
+            // Adding missed segment primes to result
+            for (int i = 0; i < segmentPrimes.size(); i++) {
+                rangeBits.set(segmentPrimes.get(i));
+            }
+        }
+
         List<Integer> rangePrimes = new ArrayList<Integer>();
-        for (int i = 0; i < rangeBits.size(); i++) {
+        for (int i = startingValue; i < endingValue; i++) {
             if (rangeBits.get(i)) {
-                rangePrimes.add(i + startingValue);
+                rangePrimes.add(i);
             }
         }
 
@@ -30,6 +49,14 @@ public class Sieve
         BitSet range = new BitSet((endingValue - startingValue) + 1);
         for (int i = startingValue; i <= endingValue; i++) {
             range.set(i);
+        }
+        return range;
+    }
+
+    private List<Boolean> generateRange(int startingValue, int endingValue) {
+        List<Boolean> range = new ArrayList<Boolean>((endingValue - startingValue) + 1);
+        for (int i = startingValue; i <= endingValue; i++) {
+            range.add(true);
         }
         return range;
     }
