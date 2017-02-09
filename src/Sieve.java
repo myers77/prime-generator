@@ -1,34 +1,35 @@
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.List;
 
 public class Sieve
     implements PrimeNumberGenerator {
     public List<Integer> generate(int startingValue, int endingValue) {
 
-        List<Boolean> booleanRange = generateRange(startingValue, endingValue);
-        List<Integer> primes = getPrimes((int) Math.sqrt(endingValue));
+        BitSet rangeBits = generateRangeBits(startingValue, endingValue);
+        List<Integer> segmentPrimes = getPrimes((int) Math.sqrt(endingValue));
 
-        for (int i = 2; i < primes.size(); i++) {
-            int num = ((int) Math.ceil(startingValue * 1.0 / primes.get(i)) * primes.get(i)) - startingValue;
-            for (int j = num; j <= endingValue - startingValue; j += primes.get(i)) {
-                booleanRange.set(j, false);
+        for (int i = 2; i < segmentPrimes.size(); i++) {
+            int num = ((int) Math.ceil(startingValue * 1.0 / segmentPrimes.get(i)) * segmentPrimes.get(i)) - startingValue;
+            for (int j = num; j <= endingValue - startingValue; j += segmentPrimes.get(i)) {
+                rangeBits.clear(j);
             }
         }
 
-        List<Integer> newPrimes = new ArrayList<Integer>();
-        for (int i = 0; i < booleanRange.size(); i++) {
-            if (booleanRange.get(i)) {
-                newPrimes.add(i + startingValue);
+        List<Integer> rangePrimes = new ArrayList<Integer>();
+        for (int i = 0; i < rangeBits.size(); i++) {
+            if (rangeBits.get(i)) {
+                rangePrimes.add(i + startingValue);
             }
         }
 
-        return newPrimes;
+        return rangePrimes;
     }
 
-    private List<Boolean> generateRange(int startingValue, int endingValue) {
-        List<Boolean> range = new ArrayList<Boolean>((endingValue - startingValue) + 1);
+    private BitSet generateRangeBits (int startingValue, int endingValue) {
+        BitSet range = new BitSet((endingValue - startingValue) + 1);
         for (int i = startingValue; i <= endingValue; i++) {
-            range.add(true);
+            range.set(i);
         }
         return range;
     }
