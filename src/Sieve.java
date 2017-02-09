@@ -8,8 +8,22 @@ public class Sieve
         List<Boolean> booleanRange = generateRange(startingValue, endingValue);
         List<Integer> primes = getPrimes((int) Math.sqrt(endingValue));
 
-        return new ArrayList<Integer>();
-    };
+        for (int i = 2; i < primes.size(); i++) {
+            int num = ((int) Math.ceil(startingValue * 1.0 / primes.get(i)) * primes.get(i)) - startingValue;
+            for (int j = num; j <= endingValue - startingValue; j += primes.get(i)) {
+                booleanRange.set(j, false);
+            }
+        }
+
+        List<Integer> newPrimes = new ArrayList<Integer>();
+        for (int i = 0; i < booleanRange.size(); i++) {
+            if (booleanRange.get(i)) {
+                newPrimes.add(i + startingValue);
+            }
+        }
+
+        return newPrimes;
+    }
 
     private List<Boolean> generateRange(int startingValue, int endingValue) {
         List<Boolean> range = new ArrayList<Boolean>((endingValue - startingValue) + 1);
@@ -35,7 +49,6 @@ public class Sieve
                 primes.add(i);
             }
         }
-        System.out.println(primes);
         return primes;
     }
 
