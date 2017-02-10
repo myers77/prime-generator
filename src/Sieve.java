@@ -39,7 +39,7 @@ public class Sieve
         }
 
         List<Integer> rangePrimes = new ArrayList<Integer>();
-        for (int i = startingValue; i < endingValue; i++) {
+        for (int i = startingValue; i <= endingValue; i++) {
             if (rangeBits.get(i)) {
                 rangePrimes.add(i);
             }
