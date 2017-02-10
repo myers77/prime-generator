@@ -1,11 +1,15 @@
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.List;
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
+import java.util.*;
+import java.util.stream.IntStream;
 
 public class Sieve
     implements PrimeNumberGenerator {
     public List<Integer> generate(int startingValue, int endingValue) {
+        boolean reverseOrder = false;
+
         if (startingValue > endingValue) {
+            reverseOrder = true;
             int temp = startingValue;
             startingValue = endingValue;
             endingValue = temp;
@@ -19,7 +23,6 @@ public class Sieve
 
         BitSet rangeBits = generateRangeBits(startingValue, endingValue);
         List<Integer> segmentPrimes = getPrimes((int) Math.sqrt(endingValue));
-        System.out.println(segmentPrimes);
 
         for (int i = 2; i < segmentPrimes.size(); i++) {
             int num = ((int) Math.ceil(startingValue * 1.0 / segmentPrimes.get(i)) * segmentPrimes.get(i));
@@ -40,6 +43,10 @@ public class Sieve
             if (rangeBits.get(i)) {
                 rangePrimes.add(i);
             }
+        }
+
+        if (reverseOrder) {
+            Collections.reverse(rangePrimes);
         }
 
         return rangePrimes;

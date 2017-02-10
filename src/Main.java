@@ -7,7 +7,6 @@ public class Main {
 
         do {
             Sieve sieve = new Sieve();
-//        System.out.println(sieve.generate(-10, 2));
             int startingValue = getInput(scanner, "starting");
             int endingValue = getInput(scanner, "ending");
             System.out.println(sieve.generate(startingValue, endingValue));
