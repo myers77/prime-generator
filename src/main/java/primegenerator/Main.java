@@ -1,3 +1,5 @@
+package primegenerator;
+
 import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
 import java.util.List;

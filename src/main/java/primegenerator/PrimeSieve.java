@@ -1,3 +1,5 @@
+package primegenerator;
+
 import java.util.*;
 
 public class PrimeSieve implements PrimeNumberGenerator {

@@ -1,3 +1,5 @@
+package primegenerator;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -9,11 +11,8 @@ import java.util.*;
 
 public class PrimeSieveTest {
     private List<Integer> primes;
-    private List<Integer> reversePrimes;
     private List<Integer> highPrimes;
-    private List<Integer> reverseHighPrimes;
     private List<Integer> giantPrimes;
-    private List<Integer> reverseGiantPrimes;
     private List<Integer> empty;
     private PrimeSieve primeSieve;
 
@@ -21,27 +20,20 @@ public class PrimeSieveTest {
     public void setUp() throws Exception {
         primeSieve = new PrimeSieve();
         primes = new ArrayList<>();
-        reversePrimes = new ArrayList<>();
         highPrimes = new ArrayList<>();
-        reverseHighPrimes = new ArrayList<>();
         giantPrimes = new ArrayList<>();
-        reverseGiantPrimes = new ArrayList<>();
         empty = new ArrayList<>();
 
         int[] intList = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41,
                          43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97};
         for (int i: intList) {
             primes.add(i);
-            reversePrimes.add(i);
         }
-        Collections.reverse(reversePrimes);
 
         int[] highIntList = {7901, 7907, 7919};
         for (int i: highIntList) {
             highPrimes.add(i);
-            reverseHighPrimes.add(i);
         }
-        Collections.reverse(reverseHighPrimes);
 
         // Data obtained from https://primes.utm.edu/lists/small/100000.txt
         File file = new File("src/data/first_100_008_primes.txt");
@@ -50,10 +42,8 @@ public class PrimeSieveTest {
         while (scanner.hasNext()) {
             Integer element = Integer.parseInt(scanner.next());
             giantPrimes.add(element);
-            reverseGiantPrimes.add(element);
         }
         scanner.close();
-        Collections.reverse(reverseGiantPrimes);
     }
 
     @Test
