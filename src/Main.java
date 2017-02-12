@@ -1,3 +1,6 @@
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -9,7 +12,23 @@ public class Main {
             Sieve sieve = new Sieve();
             int startingValue = getInput(scanner, "starting");
             int endingValue = getInput(scanner, "ending");
-            System.out.println(sieve.generate(startingValue, endingValue));
+            List<Integer> primes = sieve.generate(startingValue, endingValue);
+
+            // Using BufferedWriter to avoid Heap overflow when printing large ranges
+            try {
+                BufferedWriter log = new BufferedWriter(new OutputStreamWriter(System.out));
+                log.write("[");
+                for (int i = 0; i < primes.size() - 1; i++) {
+                    log.write(primes.get(i) + ", ");
+                }
+                log.write(primes.get(primes.size() - 1) + "]");
+                log.close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            System.out.println();
             System.out.print("Run again? [Y/n] ");
             option = scanner.nextLine();
         } while (option.isEmpty() || option.matches("[Yy]"));

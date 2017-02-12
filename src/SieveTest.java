@@ -78,12 +78,12 @@ public class SieveTest {
 
     @Test
     public void generatePositiveToZero() throws Exception {
-        assertEquals(sieve.generate(100, 0), reversePrimes);
+        assertEquals(sieve.generate(100, 0), primes);
     }
 
     @Test
     public void generatePositiveToNegative() throws Exception {
-        assertEquals(sieve.generate(100, -100), reversePrimes);
+        assertEquals(sieve.generate(100, -100), primes);
     }
 
     @Test
@@ -108,17 +108,22 @@ public class SieveTest {
 
     @Test
     public void generateReverseHighPrimes() throws Exception {
-        assertEquals(sieve.generate(7920, 7900), reverseHighPrimes);
+        assertEquals(sieve.generate(7920, 7900), highPrimes);
     }
 
     @Test
-    public void generateGiantListFullRange() throws Exception {
+    public void generateGiantList() throws Exception {
         assertEquals(sieve.generate(0, 1299827), giantPrimes);
     }
 
     @Test
-    public void generateReverseGiantListFullRange() throws Exception {
-        assertEquals(sieve.generate(1299827, 0), reverseGiantPrimes);
+    public void generateReverseGiantList() throws Exception {
+        assertEquals(sieve.generate(1299827, 0), giantPrimes);
+    }
+
+    @Test
+    public void generateSameInputZero() throws Exception {
+        assertEquals(sieve.generate(0, 0), empty);
     }
 
     @Test
@@ -133,12 +138,12 @@ public class SieveTest {
 
     @Test
     public void generateStartOnPrimeEndOnNonPrime() throws Exception {
-        assertEquals(sieve.generate(3, 10), primes.subList(1, 4));
+        assertEquals(sieve.generate(3, 12), primes.subList(1, 5));
     }
 
     @Test
     public void generateStartOnNonPrimeEndOnPrime() throws Exception {
-        assertEquals(sieve.generate(4, 10), primes.subList(2, 4));
+        assertEquals(sieve.generate(4, 12), primes.subList(2, 5));
     }
 
     @Test

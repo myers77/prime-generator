@@ -1,40 +1,42 @@
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import java.util.*;
-import java.util.stream.IntStream;
 
 public class Sieve
     implements PrimeNumberGenerator {
     public List<Integer> generate(int startingValue, int endingValue) {
-        boolean reverseOrder = false;
-
         if (startingValue > endingValue) {
-            reverseOrder = true;
             int temp = startingValue;
             startingValue = endingValue;
             endingValue = temp;
         }
+        if (endingValue < 2) {
+            return new ArrayList<>();
+        }
         if (startingValue < 2) {
             startingValue = 2;
         }
-        if (endingValue < 2) {
-            return new ArrayList<Integer>();
-        }
 
-        BitSet rangeBits = generateRangeBits(startingValue, endingValue);
-        List<Integer> segmentPrimes = getPrimes((int) Math.sqrt(endingValue));
+        BitSet rangeBits = generateNewBitSet(startingValue, endingValue);
+        BitSet segmentPrimes = removeNonPrimes(generateNewBitSet(2, (int) Math.sqrt(endingValue)));
 
-        for (int i = 2; i < segmentPrimes.size(); i++) {
-            int num = ((int) Math.ceil(startingValue * 1.0 / segmentPrimes.get(i)) * segmentPrimes.get(i));
-            for (int j = num; j <= endingValue; j += segmentPrimes.get(i)) {
+        for (int i = segmentPrimes.nextSetBit(0); i >= 0; i = segmentPrimes.nextSetBit(i+1)) {
+            int num = ((int) Math.ceil(startingValue * 1.0 / i) * i);
+            for (int j = num; j <= endingValue && j > 0; j += i) {
                 rangeBits.clear(j);
+            }
+            if (i == Integer.MAX_VALUE || i < 0) {
+                break;
             }
         }
 
+        // Add any missing segment primes to result
         if (startingValue <= (int) Math.sqrt(endingValue)) {
-            // Adding missed segment primes to result
-            for (int i = 0; i < segmentPrimes.size(); i++) {
-                rangeBits.set(segmentPrimes.get(i));
+            for (int i = segmentPrimes.nextSetBit(0); i >= 0; i = segmentPrimes.nextSetBit(i+1)) {
+                if (i <= (int) Math.sqrt(endingValue)) {
+                    rangeBits.set(i);
+                }
+                if (i >= Integer.MAX_VALUE - i) {
+                    break; // or (i+1) would overflow
+                }
             }
         }
 
@@ -43,48 +45,35 @@ public class Sieve
             if (rangeBits.get(i)) {
                 rangePrimes.add(i);
             }
-        }
-
-        if (reverseOrder) {
-            Collections.reverse(rangePrimes);
+            if (i == Integer.MAX_VALUE) {
+                break;
+            }
         }
 
         return rangePrimes;
     }
 
-    private BitSet generateRangeBits (int startingValue, int endingValue) {
+    private BitSet generateNewBitSet(int startingValue, int endingValue) {
         BitSet range = new BitSet((endingValue - startingValue) + 1);
         for (int i = startingValue; i <= endingValue; i++) {
             range.set(i);
+            if (i == Integer.MAX_VALUE) {
+                break;
+            }
         }
         return range;
     }
 
-    private List<Boolean> generateRange(int startingValue, int endingValue) {
-        List<Boolean> range = new ArrayList<Boolean>((endingValue - startingValue) + 1);
-        for (int i = startingValue; i <= endingValue; i++) {
-            range.add(true);
-        }
-        return range;
-    }
-
-    private List<Integer> getPrimes(int max) {
-        List<Boolean> booleanRange = generateRange(0, max);
-        for (int i = 2; i <= max; i++) {
-            if (booleanRange.get(i)) {
-                for (int j = i * i; j <= max; j += i) {
-                    booleanRange.set(j, false);
+    private BitSet removeNonPrimes(BitSet bitset) {
+        BitSet primes = new BitSet();
+        for (int i = 0; i <= bitset.length(); i++) {
+            if (bitset.get(i)) {
+                for (int j = i * i; j <= bitset.length(); j += i) {
+                    bitset.clear(j);
                 }
             }
         }
-
-        List<Integer> primes = new ArrayList<Integer>();
-        for (int i = 0; i < booleanRange.size(); i++) {
-            if (booleanRange.get(i)) {
-                primes.add(i);
-            }
-        }
-        return primes;
+        return bitset;
     }
 
     public boolean isPrime(int value) {
