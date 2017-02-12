@@ -1,5 +1,7 @@
 import java.io.BufferedWriter;
+import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
+import java.io.PrintStream;
 import java.util.List;
 import java.util.Scanner;
 
@@ -10,11 +12,19 @@ public class Main {
 
         do {
             Sieve sieve = new Sieve();
+
+            System.out.println(sieve.isPrime(-100));
+            System.out.println(sieve.isPrime(-1));
+            System.out.println(sieve.isPrime(0));
+            System.out.println(sieve.isPrime(1));
+            System.out.println(sieve.isPrime(2));
+            System.out.println(sieve.isPrime(Integer.MAX_VALUE));
+
             int startingValue = getInput(scanner, "starting");
             int endingValue = getInput(scanner, "ending");
             List<Integer> primes = sieve.generate(startingValue, endingValue);
+//            List<Integer> primes = sieve.generate(0, Integer.MAX_VALUE);
 
-            // Using BufferedWriter to avoid Heap overflow when printing large ranges
             try {
                 BufferedWriter log = new BufferedWriter(new OutputStreamWriter(System.out));
                 log.write("[");

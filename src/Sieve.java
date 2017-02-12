@@ -77,7 +77,18 @@ public class Sieve
     }
 
     public boolean isPrime(int value) {
-        // May not need this method
-        return false;
+        if (value <= 1) {
+            return false;
+        }
+
+        // Build prime sieve up to sqrt and check divisibility against that
+        BitSet segmentPrimes = removeNonPrimes(generateNewBitSet(2, (int) Math.sqrt(value)));
+        for (int i = segmentPrimes.nextSetBit(0); i >= 0; i = segmentPrimes.nextSetBit(i+1)) {
+            if (value % i == 0) {
+                return false;
+            }
+        }
+
+        return true;
     };
 }

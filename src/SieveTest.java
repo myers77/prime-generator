@@ -155,4 +155,34 @@ public class SieveTest {
     public void generateStartOnNonPrimeEndOnNonPrime() throws Exception {
         assertEquals(sieve.generate(4, 12), primes.subList(2, 5));
     }
+
+    @Test
+    public void isPrimeNegative() throws Exception {
+        assertEquals(sieve.isPrime(-1), false);
+    }
+
+    @Test
+    public void isPrimeZero() throws Exception {
+        assertEquals(sieve.isPrime(0), false);
+    }
+
+    @Test
+    public void isPrimeOne() throws Exception {
+        assertEquals(sieve.isPrime(1), false);
+    }
+
+    @Test
+    public void isPrimeTwo() throws Exception {
+        assertEquals(sieve.isPrime(2), true);
+    }
+
+    @Test
+    public void isPrimePositivePrime() throws Exception {
+        assertEquals(sieve.isPrime(29), true);
+    }
+
+    @Test
+    public void isPrimePositiveNonPrime() throws Exception {
+        assertEquals(sieve.isPrime(30), false);
+    }
 }
