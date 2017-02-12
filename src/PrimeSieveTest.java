@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.*;
 
-public class SieveTest {
+public class PrimeSieveTest {
     private List<Integer> primes;
     private List<Integer> reversePrimes;
     private List<Integer> highPrimes;
@@ -15,11 +15,11 @@ public class SieveTest {
     private List<Integer> giantPrimes;
     private List<Integer> reverseGiantPrimes;
     private List<Integer> empty;
-    private Sieve sieve;
+    private PrimeSieve primeSieve;
 
     @Before
     public void setUp() throws Exception {
-        sieve = new Sieve();
+        primeSieve = new PrimeSieve();
         primes = new ArrayList<>();
         reversePrimes = new ArrayList<>();
         highPrimes = new ArrayList<>();
@@ -58,131 +58,122 @@ public class SieveTest {
 
     @Test
     public void generateZeroToPositive() throws Exception {
-        assertEquals(sieve.generate(0, 100), primes);
+        assertEquals(primeSieve.generate(0, 100), primes);
     }
 
     @Test
     public void generateBelowSquareRootToPositive() throws Exception {
-        assertEquals(sieve.generate(5, 100), primes.subList(2, primes.size()));
+        assertEquals(primeSieve.generate(5, 100), primes.subList(2, primes.size()));
     }
 
     @Test
     public void generateSquareRootToPositive() throws Exception {
-        assertEquals(sieve.generate(10, 100), primes.subList(4, primes.size()));
+        assertEquals(primeSieve.generate(10, 100), primes.subList(4, primes.size()));
     }
 
     @Test
     public void generateAboveSquareRootToPositive() throws Exception {
-        assertEquals(sieve.generate(50, 100), primes.subList(15, primes.size()));
+        assertEquals(primeSieve.generate(50, 100), primes.subList(15, primes.size()));
     }
 
     @Test
     public void generatePositiveToZero() throws Exception {
-        assertEquals(sieve.generate(100, 0), primes);
+        assertEquals(primeSieve.generate(100, 0), primes);
     }
 
     @Test
     public void generatePositiveToNegative() throws Exception {
-        assertEquals(sieve.generate(100, -100), primes);
+        assertEquals(primeSieve.generate(100, -100), primes);
     }
 
     @Test
     public void generateZeroToNegative() throws Exception {
-        assertEquals(sieve.generate(0, -100), empty);
+        assertEquals(primeSieve.generate(0, -100), empty);
     }
 
     @Test
     public void generateNegativeToZero() throws Exception {
-        assertEquals(sieve.generate(-100, 0), empty);
+        assertEquals(primeSieve.generate(-100, 0), empty);
     }
 
     @Test
     public void generateNegativeToPositive() throws Exception {
-        assertEquals(sieve.generate(-100, 100), primes);
+        assertEquals(primeSieve.generate(-100, 100), primes);
     }
 
     @Test
     public void generateHighPrimes() throws Exception {
-        assertEquals(sieve.generate(7900, 7920), highPrimes);
+        assertEquals(primeSieve.generate(7900, 7920), highPrimes);
     }
 
     @Test
     public void generateReverseHighPrimes() throws Exception {
-        assertEquals(sieve.generate(7920, 7900), highPrimes);
+        assertEquals(primeSieve.generate(7920, 7900), highPrimes);
     }
 
     @Test
     public void generateGiantList() throws Exception {
-        assertEquals(sieve.generate(0, 1299827), giantPrimes);
+        assertEquals(primeSieve.generate(0, 1299827), giantPrimes);
     }
 
     @Test
     public void generateReverseGiantList() throws Exception {
-        assertEquals(sieve.generate(1299827, 0), giantPrimes);
+        assertEquals(primeSieve.generate(1299827, 0), giantPrimes);
     }
 
     @Test
     public void generateSameInputZero() throws Exception {
-        assertEquals(sieve.generate(0, 0), empty);
+        assertEquals(primeSieve.generate(0, 0), empty);
     }
 
     @Test
     public void generateSameInputPrime() throws Exception {
-        assertEquals(sieve.generate(2, 2), primes.subList(0, 1));
+        assertEquals(primeSieve.generate(2, 2), primes.subList(0, 1));
     }
 
     @Test
     public void generateSameInputNonPrime() throws Exception {
-        assertEquals(sieve.generate(4, 4), empty);
+        assertEquals(primeSieve.generate(4, 4), empty);
     }
 
     @Test
     public void generateStartOnPrimeEndOnNonPrime() throws Exception {
-        assertEquals(sieve.generate(3, 12), primes.subList(1, 5));
+        assertEquals(primeSieve.generate(3, 12), primes.subList(1, 5));
     }
 
     @Test
     public void generateStartOnNonPrimeEndOnPrime() throws Exception {
-        assertEquals(sieve.generate(4, 12), primes.subList(2, 5));
+        assertEquals(primeSieve.generate(4, 12), primes.subList(2, 5));
     }
 
     @Test
     public void generateStartOnPrimeEndOnPrime() throws Exception {
-        assertEquals(sieve.generate(3, 11), primes.subList(1, 5));
+        assertEquals(primeSieve.generate(3, 11), primes.subList(1, 5));
     }
 
     @Test
     public void generateStartOnNonPrimeEndOnNonPrime() throws Exception {
-        assertEquals(sieve.generate(4, 12), primes.subList(2, 5));
+        assertEquals(primeSieve.generate(4, 12), primes.subList(2, 5));
     }
 
     @Test
     public void isPrimeNegative() throws Exception {
-        assertEquals(sieve.isPrime(-1), false);
+        assertEquals(primeSieve.isPrime(-1), false);
     }
 
     @Test
-    public void isPrimeZero() throws Exception {
-        assertEquals(sieve.isPrime(0), false);
+    public void isPrimePrimes() throws Exception {
+        for (int i = 0; i < primes.size(); i++) {
+            assertEquals(primeSieve.isPrime(primes.get(i)), true);
+        }
     }
 
     @Test
-    public void isPrimeOne() throws Exception {
-        assertEquals(sieve.isPrime(1), false);
-    }
-
-    @Test
-    public void isPrimeTwo() throws Exception {
-        assertEquals(sieve.isPrime(2), true);
-    }
-
-    @Test
-    public void isPrimePositivePrime() throws Exception {
-        assertEquals(sieve.isPrime(29), true);
-    }
-
-    @Test
-    public void isPrimePositiveNonPrime() throws Exception {
-        assertEquals(sieve.isPrime(30), false);
+    public void isPrimeNonPrimes() throws Exception {
+        for (int i = 0; i < primes.get(primes.size() - 1); i++) {
+            if (!primes.contains(i)) {
+                assertEquals(primeSieve.isPrime(i), false);
+            }
+        }
     }
 }

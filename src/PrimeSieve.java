@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Sieve
+public class PrimeSieve
     implements PrimeNumberGenerator {
     public List<Integer> generate(int startingValue, int endingValue) {
         if (startingValue > endingValue) {
