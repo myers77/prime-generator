@@ -36,7 +36,7 @@ public class PrimeSieveTest {
         }
 
         // Data obtained from https://primes.utm.edu/lists/small/100000.txt
-        File file = new File("src/data/first_100_008_primes.txt");
+        File file = new File("src/main/java/data/first_100_008_primes.txt");
         Scanner scanner = new Scanner(new FileInputStream(file));
         scanner.useDelimiter(",");
         while (scanner.hasNext()) {
