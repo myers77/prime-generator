@@ -17,7 +17,7 @@ public class PrimeSieve implements PrimeNumberGenerator {
         BitSet range = generateRangeBitSet(startingValue, endingValue);
         BitSet segmentPrimes = removeNonPrimesFromSegment(generateRangeBitSet(2, (int) Math.sqrt(endingValue)));
 
-        range = removeNonPrimesFromRange(segmentPrimes, range, startingValue, endingValue);
+        range = removeSegmentMultiplesFromRange(segmentPrimes, range, startingValue, endingValue);
         range = addMissingSegmentPrimesToRange(segmentPrimes, range, startingValue, endingValue);
 
         return convertBitSetToIntegerList(range);
@@ -30,7 +30,7 @@ public class PrimeSieve implements PrimeNumberGenerator {
         }
 
         BitSet sievePrimes = removeNonPrimesFromSegment(generateRangeBitSet(2, (int) Math.sqrt(value)));
-        for (int i = sievePrimes.nextSetBit(0); i >= 0; i = sievePrimes.nextSetBit(i+1)) {
+        for (int i = sievePrimes.nextSetBit(0); i >= 0; i = sievePrimes.nextSetBit(i + 1)) {
             if (value % i == 0) {
                 return false;
             }
@@ -43,6 +43,9 @@ public class PrimeSieve implements PrimeNumberGenerator {
         BitSet range = new BitSet((endingValue - startingValue) + 1);
         for (int i = startingValue; i <= endingValue; i++) {
             range.set(i);
+            if (i == Integer.MAX_VALUE) {
+                break;
+            }
         }
         return range;
     }
@@ -56,8 +59,8 @@ public class PrimeSieve implements PrimeNumberGenerator {
         return bitset;
     }
 
-    private BitSet removeNonPrimesFromRange(BitSet segmentPrimes, BitSet range, int startingValue, int endingValue) {
-        for (int i = segmentPrimes.nextSetBit(0); i >= 0; i = segmentPrimes.nextSetBit(i+1)) {
+    private BitSet removeSegmentMultiplesFromRange(BitSet segmentPrimes, BitSet range, int startingValue, int endingValue) {
+        for (int i = segmentPrimes.nextSetBit(0); i >= 0; i = segmentPrimes.nextSetBit(i + 1)) {
             int firstMultipleInRange = ((int) Math.ceil(startingValue * 1.0 / i) * i);
             for (int j = firstMultipleInRange; j <= endingValue && j > 0; j += i) {
                 range.clear(j);
@@ -82,7 +85,7 @@ public class PrimeSieve implements PrimeNumberGenerator {
 
     private List<Integer> convertBitSetToIntegerList(BitSet bitset) {
         List<Integer> rangePrimes = new ArrayList<>();
-        for (int i = bitset.nextSetBit(0); i >= 0; i = bitset.nextSetBit(i+1)) {
+        for (int i = bitset.nextSetBit(0); i >= 0; i = bitset.nextSetBit(i + 1)) {
             rangePrimes.add(i);
             if (i == Integer.MAX_VALUE) {
                 break;
