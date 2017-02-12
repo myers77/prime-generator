@@ -163,8 +163,8 @@ public class PrimeSieveTest {
 
     @Test
     public void isPrimePrimes() throws Exception {
-        for (int i = 0; i < primes.size(); i++) {
-            assertEquals(primeSieve.isPrime(primes.get(i)), true);
+        for (Integer prime : primes) {
+            assertEquals(primeSieve.isPrime(prime), true);
         }
     }
 

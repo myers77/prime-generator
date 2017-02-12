@@ -18,10 +18,7 @@ public class PrimeSieve implements PrimeNumberGenerator {
         BitSet segmentPrimes = removeNonPrimesFromSegment(generateRangeBitSet(2, (int) Math.sqrt(endingValue)));
 
         range = removeNonPrimesFromRange(segmentPrimes, range, startingValue, endingValue);
-
-        if (startingValue <= (int) Math.sqrt(endingValue)) {
-            range = addMissingSegmentPrimesToRange(segmentPrimes, range, endingValue);
-        }
+        range = addMissingSegmentPrimesToRange(segmentPrimes, range, startingValue, endingValue);
 
         return convertBitSetToIntegerList(range);
     }
@@ -72,10 +69,12 @@ public class PrimeSieve implements PrimeNumberGenerator {
         return range;
     }
 
-    private BitSet addMissingSegmentPrimesToRange(BitSet segmentPrimes, BitSet range, int endingValue) {
-        for (int i = segmentPrimes.nextSetBit(0); i >= 0; i = segmentPrimes.nextSetBit(i+1)) {
-            if (i <= (int) Math.sqrt(endingValue)) {
-                range.set(i);
+    private BitSet addMissingSegmentPrimesToRange(BitSet segmentPrimes, BitSet range, int startingValue, int endingValue) {
+        if (startingValue <= (int) Math.sqrt(endingValue)) {
+            for (int i = segmentPrimes.nextSetBit(0); i >= 0; i = segmentPrimes.nextSetBit(i + 1)) {
+                if (i >= startingValue) {
+                    range.set(i);
+                }
             }
         }
         return range;
